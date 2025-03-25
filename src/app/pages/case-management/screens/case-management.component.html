@@ -1,0 +1,170 @@
+<div class="case-management">
+  <vks-filter-common
+    [fieldsConfig]="filterConfig"
+    (filterEvent)="onFilter($event)"
+  >
+  </vks-filter-common>
+
+  <vks-table-common
+    [data]="listCase"
+    [title]="title"
+    [configHeader]="configHeader"
+    [showBtnSearch]="true"
+    [showPagination]="true"
+    [totalRecord]="totalRecords"
+    [limitPerPage]="pageSize"
+    (doubleClickRow)="onDoubleClickRow($event)"
+    (searchEvent)="onSearch($event)"
+    (pageChangeEvent)="onPageChange($event)"
+  >
+    <ng-container action-button>
+      <button pButton pRipple type="button" (click)="onOpenModal()">
+        Thêm mới
+      </button>
+    </ng-container>
+
+    <ng-template #bodyTemplateRef let-itemRecord>
+      <div class="action-buttons">
+        <div class="card flex justify-content-center">
+          <p-menu #menu [model]="actionConfig" appendTo="body" [popup]="true">
+            <ng-template pTemplate="item" let-itemMenu>
+              <button
+                pRipple
+                class="relative overflow-hidden w-full p-link flex align-items-center text-color hover:surface-200 border-noround"
+              >
+                <a class="p-menuitem-link">
+                  <span [class]="itemMenu.icon"></span>
+                  <span class="ml-2">{{ itemMenu.label }}</span>
+                </a>
+              </button>
+            </ng-template>
+          </p-menu>
+          <p-button
+            [rounded]="true"
+            [text]="true"
+            (onClick)="menu.toggle($event)"
+            (dblclick)="$event.stopPropagation()"
+            severity="secondary"
+            icon="pi pi-ellipsis-h"
+          />
+        </div>
+      </div>
+    </ng-template>
+  </vks-table-common>
+
+  <p-dialog
+    [modal]="true"
+    [(visible)]="isVisibleModal"
+    [header]="'Thêm mới vụ án'"
+    [style]="{ width: '50%' }"
+    (onHide)="onCloseModal()"
+  >
+  <form (ngSubmit)="onSubmit(caseForm.value)" #caseForm="ngForm" class="p-fluid">
+    <div class="p-field mb-3">
+      <label for="title" class="block mb-2">Tiêu đề</label>
+      <input
+        pInputText
+        id="title"
+        name="title"
+        [(ngModel)]="newCase.title"
+        required
+        #titleInput="ngModel"
+      >
+      <small
+        *ngIf="titleInput.invalid && (titleInput.dirty || titleInput.touched)"
+        class="p-error block"
+      >
+        Tiêu đề không được để trống
+      </small>
+    </div>
+
+    <div class="p-field mb-3">
+      <label for="case_id" class="block mb-2">Mã vụ án</label>
+      <input
+        pInputText
+        id="case_id"
+        name="case_id"
+        [(ngModel)]="newCase.case_id"
+        required
+        #caseIdInput="ngModel"
+      >
+      <small
+        *ngIf="caseIdInput.invalid && (caseIdInput.dirty || caseIdInput.touched)"
+        class="p-error block"
+      >
+        Mã vụ án không được để trống
+      </small>
+    </div>
+
+    <div class="p-field mb-3">
+      <label for="department" class="block mb-2">Phòng ban</label>
+      <p-dropdown
+        [options]="departmentOptions"
+        [(ngModel)]="newCase.department"
+        name="department"
+        optionLabel="name"
+        optionValue="code"
+        [required]="true"
+        placeholder="Chọn phòng ban"
+        #departmentDropdown="ngModel"
+      ></p-dropdown>
+      <small
+        *ngIf="departmentDropdown.invalid && (departmentDropdown.dirty || departmentDropdown.touched)"
+        class="p-error block"
+      >
+        Phòng ban không được để trống
+      </small>
+    </div>
+
+    <div class="p-field mb-3">
+      <label for="type" class="block mb-2">Loại vụ án</label>
+      <p-dropdown
+        [options]="caseTypeOptions"
+        [(ngModel)]="newCase.type"
+        name="type"
+        optionLabel="name"
+        optionValue="code"
+        [required]="true"
+        placeholder="Chọn loại vụ án"
+        #typeDropdown="ngModel"
+      ></p-dropdown>
+      <small
+        *ngIf="typeDropdown.invalid && (typeDropdown.dirty || typeDropdown.touched)"
+        class="p-error block"
+      >
+        Loại vụ án không được để trống
+      </small>
+    </div>
+
+    <div class="p-field mb-3">
+      <label for="description" class="block mb-2">Mô tả</label>
+      <textarea
+        pInputTextarea
+        id="description"
+        name="description"
+        [(ngModel)]="newCase.description"
+        rows="4"
+      ></textarea>
+    </div>
+
+    <div class="p-dialog-footer">
+      <button
+        pButton
+        type="button"
+        label="Hủy"
+        class="p-button-text"
+        (click)="onCloseModal()"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Tạo"
+        [disabled]="!caseForm.form.valid"
+        class="p-button-primary"
+      ></button>
+    </div>
+  </form>
+  </p-dialog>
+
+  <p-toast position="top-right"></p-toast>
+</div>
