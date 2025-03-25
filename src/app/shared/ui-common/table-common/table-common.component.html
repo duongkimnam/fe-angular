@@ -4,10 +4,10 @@
             <span>{{ title }}</span>
         </div>
         <div class="flex justify-content-end action-button" [style.height]="!showBtnSearch && '32.5px'">
-            <p-iconField *ngIf="showBtnSearch" class="mr-2" iconPosition="left">
+            <!-- <p-iconField *ngIf="showBtnSearch" class="mr-2" iconPosition="left">
                 <p-inputIcon styleClass="pi pi-search" />
                 <input type="text" pInputText placeholder="Tìm kiếm" [formControl]="searchInput" />
-            </p-iconField>
+            </p-iconField> -->
             <div *ngIf="showActionButton">
                 <ng-content select="[action-button]"></ng-content>
             </div>

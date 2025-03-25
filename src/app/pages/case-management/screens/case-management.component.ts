@@ -217,6 +217,4 @@ export class CaseManagementComponent implements OnInit {
         }
       });
   }
-
-
 }
